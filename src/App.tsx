@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 function App() {
+  const projects = [
+    { name: "Lab 1 — D3 Bar Chart", url: "#" },
+    { name: "Lab 2 — D3 Interactions", url: "#" },
+    { name: "Final Project", url: "#" },
+  ];
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header style={{ padding: "48px 24px" }}>
+        <h1>Your Name</h1>
+        <p>CIS 4930 · Introduction to Data Visualization · Fall 2026</p>
       </header>
+
+      <main style={{ padding: "0 24px" }}>
+        <h2>Projects</h2>
+        <ul>
+          {projects.map((p) => (
+            <li key={p.name}>
+              <a href={p.url}>{p.name}</a>
+            </li>
+          ))}
+        </ul>
+      </main>
     </div>
   );
 }
