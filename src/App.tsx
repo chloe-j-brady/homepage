@@ -1,31 +1,30 @@
-import React from "react";
-import "./App.css";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Nav from "./components/Nav";
+import Home from "./pages/Home";
+import Experience from "./pages/Experience";
+import Travel from "./pages/Travel";
+import DataVisualization from "./pages/DataVisualization";
+import A0 from "./pages/data-visualization/A0";
+import "./App.scss";
 
 function App() {
-  const projects = [
-    { name: "Lab 1 — D3 Bar Chart", url: "#" },
-    { name: "Lab 2 — D3 Interactions", url: "#" },
-    { name: "Final Project", url: "#" },
-  ];
-
   return (
-    <div className="App">
-      <header style={{ padding: "48px 24px" }}>
-        <h1>Your Name</h1>
-        <p>CIS 4930 · Introduction to Data Visualization · Fall 2026</p>
-      </header>
-
-      <main style={{ padding: "0 24px" }}>
-        <h2>Projects</h2>
-        <ul>
-          {projects.map((p) => (
-            <li key={p.name}>
-              <a href={p.url}>{p.name}</a>
-            </li>
-          ))}
-        </ul>
-      </main>
-    </div>
+    <HashRouter>
+      <div className="App">
+        <Header />
+        <Nav />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/experience" element={<Experience />} />
+            <Route path="/travel" element={<Travel />} />
+            <Route path="/data-visualization" element={<DataVisualization />} />
+            <Route path="/data-visualization/a0" element={<A0 />} />
+          </Routes>
+        </main>
+      </div>
+    </HashRouter>
   );
 }
 
