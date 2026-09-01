@@ -10,10 +10,10 @@ function Home() {
           <img src={profilePhoto} alt="Chloe Brady" className="profile-photo" />
 
           <div className="about-text">
-            <h1>Hey, I'm Chloe 👋</h1>
+            <h1>Hi, I'm Chloe Brady</h1>
             <p>
               CS senior at FSU, with minors in Chemistry and Math. Interested in
-              BI development, data science, ML, and analytics.
+              BI development, Data Science, ML, and Analytics.
             </p>
           </div>
 
@@ -24,12 +24,12 @@ function Home() {
       <Reveal>
         <section className="about-details">
           <p>
-            Some of my favorite classes so far have been Intro to Data Science
+            Some of my favorite classes so far have been Intro to Data Science, Data Mining,
             and Databases — I like the moment where a pile of raw, disorganized
             data actually starts making sense. On the chemistry side, Organic
             Chemistry has been a surprising highlight; there's something
             satisfying about working through a synthesis problem that isn't
-            all that different from debugging code.
+            all that different from writing and debugging code.
           </p>
           <p>
             Outside of school, I'm big into working out. From morning walks with my friends, lifting weights to swimming — it's my go-to way to

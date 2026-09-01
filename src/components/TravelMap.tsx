@@ -1,3 +1,9 @@
+/* For the interactive travel globe, I used Claude (Anthropic)
+to help build the initial version and to research the numeric country codes for the visited-countries set. 
+That first version used scroll-based rotation and had a bug where visited countries weren't highlighting correctly. 
+I debugged and fixed the country-highlighting logic, and reworked the interaction
+so the globe rotates via mouse drag instead of scroll.*/ 
+
 import { useState, useRef } from "react";
 import { ComposableMap, Geographies, Geography, Sphere, Graticule } from "react-simple-maps";
 

@@ -1,3 +1,8 @@
+/*For the quote box, I selected the quotes myself 
+but didn't know how to implement the "Next" button behavior. 
+I used Claude (Anthropic) to help build the cycling logic 
+(index state plus wrap-around using modulo).*/
+
 import { useState } from "react";
 
 interface Quote {

@@ -1,4 +1,17 @@
+/* 
+AI usage note: I hadn't used SCSS/Sass before this project,
+so I used Claude (Anthropic) to help write this
+stylesheet — the variable system, the mixin, and the
+responsive/nesting patterns throughout. Comments below are
+my notes explaining what each part does and why, so I can
+walk through this file if asked.*/
+
 // ---- Variables ----
+// SCSS lets you define reusable values with $name. Regular CSS
+// doesn't have this natively
+// Defining colors/spacing here means if I want to change my
+// theme's purple, I only change it in ONE place, not everywhere
+// it's used across the file.
 $color-bg: #f5f3fa;        // very light lavender background
 $color-surface: #ffffff;   // white cards/panels
 $color-text: #2e2440;      // deep purple-toned text (better contrast than pure black)
@@ -7,23 +20,41 @@ $color-primary: #9b7fd4;   // main light purple accent
 $color-primary-dark: #7a5cc0; // darker purple for hover states
 $color-border: #e2e2ea;
 
+// Spacing scale — instead of picking random pixel values every
+// time I need margin/padding, I pick from this fixed set (8, 16,
+// 32, 48px). Keeps spacing consistent across the whole site
+// instead of everything being slightly different by accident.
 $spacing-sm: 8px;
 $spacing-md: 16px;
 $spacing-lg: 32px;
 $spacing-xl: 48px;
 
-$radius: 10px;
-$max-width: 960px;
+$radius: 10px;      // border-radius used on cards/buttons — one value, consistent look
+$max-width: 960px;  // how wide the main content area gets on large screens
 
+// Breakpoints: screen widths where the layout should change
+// stack things vertically on small screens instead of
+// side-by-side. Using variables here means every media query
+// in this file agrees on what "mobile" and "tablet" mean.
 $breakpoint-tablet: 768px;
 $breakpoint-mobile: 480px;
 
 // ---- Mixin ----
+// A mixin is SCSS's version of a reusable function, but for CSS
+// rules instead of values. @include container (used all over
+// this file below) pastes in this exact block of centering/
+// padding rules. Without a mixin I'd have to copy-paste this
+// max-width/margin/padding block into every section by hand —
+// this way I write it once and reuse it.
 @mixin container {
   max-width: $max-width;
-  margin: 0 auto;
+  margin: 0 auto;       // centers the block horizontally
   padding: 0 $spacing-lg;
 
+  // Nested media query: SCSS lets you nest a @media rule inside
+  // a selector instead of writing a separate block elsewhere in
+  // the file. On very small screens, use less side padding since
+  // there's less room to spare.
   @media (max-width: $breakpoint-mobile) {
     padding: 0 $spacing-md;
   }
@@ -31,24 +62,31 @@ $breakpoint-mobile: 480px;
 
 // ---- Base page ----
 .App {
-  min-height: 100vh;
+  min-height: 100vh; // page always fills at least the full screen height, even with little content
   background-color: $color-bg;
   color: $color-text;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  // ^ this is a system-font stack: use the OS's native font
+  // (San Francisco on Mac, Segoe UI on Windows, etc.) instead of
+  // loading a custom web font, so text renders fast and familiar.
 }
+
 // ---- Header ----
 .Header {
-  @include container;
+  @include container; // pulls in the centering/padding rules defined above
   padding-top: $spacing-xl;
   padding-bottom: $spacing-md;
   text-align: center;
 
+  // Nesting: writing "h1 { ... }" INSIDE .Header compiles down to
+  // ".Header h1 { ... }" in plain CSS. It's just a shorthand for
+  // "this rule only applies to h1s that are inside .Header".
   h1 {
     margin: 0 0 $spacing-sm;
     font-size: 2.5rem;
 
     @media (max-width: $breakpoint-mobile) {
-      font-size: 1.8rem;
+      font-size: 1.8rem; // shrink the heading on small screens so it doesn't overflow
     }
   }
 
@@ -62,9 +100,9 @@ $breakpoint-mobile: 480px;
 // ---- Nav ----
 .Nav {
   @include container;
-  display: flex;
-  justify-content: center;
-  gap: $spacing-md;
+  display: flex;              // lays nav links out in a row
+  justify-content: center;    // centers them horizontally
+  gap: $spacing-md;           // even spacing between links, no manual margins needed
   padding-bottom: $spacing-lg;
 
   a {
@@ -73,15 +111,23 @@ $breakpoint-mobile: 480px;
     font-weight: 600;
     padding: $spacing-sm $spacing-md;
     border-radius: $radius;
+    // Only animate color/background, not everything — keeps the
+    // hover effect smooth instead of janky.
     transition: background-color 0.15s ease, color 0.15s ease;
 
+    // "&" refers back to the parent selector (here, "a"). So
+    // "&:hover" compiles to "a:hover" — same idea as nesting above,
+    // just for pseudo-classes instead of child elements.
     &:hover {
       background-color: $color-surface;
       color: $color-primary;
     }
 
+    // Applied when React adds the "active" class to the current page's link
     &.active {
       color: $color-primary;
+      // rgba() here takes my $color-primary variable and adds 10%
+      // opacity — a subtle tinted background instead of a solid one.
       background-color: rgba($color-primary, 0.1);
     }
   }
@@ -91,14 +137,14 @@ $breakpoint-mobile: 480px;
 .about-me {
   @include container;
   display: flex;
-  align-items: center;
+  align-items: center;   // vertically centers photo + text next to each other
   gap: $spacing-lg;
   padding-top: $spacing-xl;
   padding-bottom: $spacing-xl;
-  flex-wrap: wrap;
+  flex-wrap: wrap;        // lets items drop to a new line instead of overflowing on narrow screens
 
   @media (max-width: $breakpoint-mobile) {
-    flex-direction: column;
+    flex-direction: column; // stack photo above text instead of side-by-side on phones
     text-align: center;
   }
 }
@@ -106,23 +152,26 @@ $breakpoint-mobile: 480px;
 .profile-photo {
   width: 180px;
   height: 180px;
-  object-fit: cover;
-  border-radius: 50%;
+  object-fit: cover;      // crops the photo to fill the box instead of squishing/stretching it
+  border-radius: 50%;     // turns a square image into a circle
   border: 3px solid $color-primary;
-  flex-shrink: 0;
+  flex-shrink: 0;         // stops the photo from shrinking if the text next to it is long
 }
 
 // ---- About Details (longer text below the hero row) ----
 .about-details {
   @include container;
-  max-width: 700px;
+  max-width: 700px;       // narrower than the page max-width — long paragraphs read better narrower
   padding-bottom: $spacing-xl;
 
   p {
     color: $color-muted;
-    line-height: 1.6;
+    line-height: 1.6;     // extra line spacing for readability in paragraph text
     margin: 0 0 $spacing-md;
 
+    // ":last-child" removes the bottom margin from the final
+    // paragraph only, so there's no extra empty space before
+    // the next section starts.
     &:last-child {
       margin-bottom: 0;
     }
@@ -146,6 +195,7 @@ $breakpoint-mobile: 480px;
     line-height: 1.6;
   }
 }
+
 // ---- Experience ----
 .experience {
   @include container;
@@ -162,18 +212,80 @@ $breakpoint-mobile: 480px;
   border: 1px solid $color-primary;
   border-radius: $radius;
   padding: $spacing-lg;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-md; // gap between stacked experience cards
 
   h3 {
     margin: 0 0 $spacing-sm;
     color: $color-text;
   }
-  .experience-meta
-  {
+
+  .experience-meta {
     color: $color-muted;
-    font-style: italic;
-    margin-bottom: $spacing-sm;   
-  } 
+    font-style: italic;      // used for things like "Company — Date range"
+    margin-bottom: $spacing-sm;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: $spacing-md; // keeps bullet points from hugging the card's edge
+
+    li {
+      margin-bottom: $spacing-sm;
+      line-height: 1.5;
+      color: $color-text;
+    }
+  }
+}
+// ---- Timeline (Experience page, extra credit) ----
+.timeline {
+  position: relative;
+  padding-left: $spacing-lg;
+  margin-bottom: $spacing-xl;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: $color-border;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: $spacing-lg;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -$spacing-lg + 0px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: $color-primary;
+  border: 2px solid $color-bg;
+}
+
+.timeline-date {
+  color: $color-muted;
+  font-weight: 600;
+  margin: 0 0 $spacing-sm;
+}
+
+.timeline-content {
+  background-color: $color-surface;
+  border: 1px solid $color-primary;
+  border-radius: $radius;
+  padding: $spacing-lg;
+
+  h3 {
+    margin: 0 0 $spacing-sm;
+    color: $color-text;
+  }
+
   ul {
     margin: 0;
     padding-left: $spacing-md;
@@ -185,6 +297,7 @@ $breakpoint-mobile: 480px;
     }
   }
 }
+
 // ---- Study Abroad ----
 .study-abroad {
   @include container;
@@ -201,14 +314,15 @@ $breakpoint-mobile: 480px;
   border: 1px solid $color-primary;
   border-radius: $radius;
   padding: $spacing-lg;
-  max-width: 700px;
 
   p {
     color: $color-text;
     line-height: 1.6;
     margin: 0;
+    max-width: none;
   }
 }
+
 // ---- Resume ----
 .resume-page {
   @include container;
@@ -222,45 +336,11 @@ $breakpoint-mobile: 480px;
 
 .resume-frame {
   width: 100%;
-  height: 80vh;
+  height: 80vh;   // 80% of the viewport (screen) height — keeps an embedded PDF/iframe usably tall
   border: 1px solid $color-primary;
   border-radius: $radius;
 }
 
-// ---- Data Visualization (coursework) ----
-.coursework-list,
-.assignment-detail {
-  @include container;
-  padding-top: $spacing-xl;
-  padding-bottom: $spacing-xl;
-
-  h2 {
-    margin-bottom: $spacing-md;
-  }
-
-  p {
-    color: $color-muted;
-    margin-bottom: $spacing-md;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    margin-bottom: $spacing-sm;
-  }
-a {
-    color: $color-primary-dark;
-    font-weight: 600;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
 // ---- Travel Map ----
 .travel-page {
   @include container;
@@ -270,48 +350,54 @@ a {
   p {
     color: $color-muted;
     line-height: 1.6;
-    max-width: 700px;
     margin-bottom: $spacing-lg;
   }
 }
 
-
+// Styles for each country shape in the TravelMap globe component
 .country {
-  fill: #e5e1f0;
-  stroke: $color-bg;
+  fill: #e5e1f0;             // default unvisited color
+  stroke: $color-bg;         // thin border matching the page background, separates countries visually
   stroke-width: 0.5;
-  transition: fill 0.15s ease;
+  transition: fill 0.15s ease; // smooth color change on hover instead of an instant snap
 
   &.visited {
-    fill: $color-primary;
+    fill: $color-primary;    // highlighted color for countries in the visitedCodes set
   }
 
   &:hover {
     fill: $color-primary-dark;
-    cursor: pointer;
+    cursor: pointer;         // shows a hand cursor so it's clear countries are interactive
   }
 }
+
 .map-tooltip {
   margin-top: $spacing-sm;
   text-align: center;
   color: $color-muted;
   font-weight: 600;
-  min-height: 1.5em;
+  min-height: 1.5em; // reserves space for the tooltip text so the layout doesn't jump when it appears/disappears
 }
+
 // ---- Scroll reveal animation ----
+// Pairs with the Reveal.tsx component — this is the actual visual
+// animation; the component only decides *when* to add/remove the
+// "reveal-visible" class.
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
+  opacity: 0;                       // fully transparent (hidden) by default
+  transform: translateY(24px);      // shifted down 24px, animates upward into place
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .reveal-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0);         // back to its normal position
 }
 
-// Respect users who've asked their OS/browser to reduce motion —
-// skip the animation and just show content immediately.
+// Accessibility: respects the OS-level "reduce motion" setting some
+// users turn on (often for motion sensitivity/vestibular reasons).
+// When set, skip the animation entirely and just show content
+// immediately instead of forcing movement on them.
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -320,7 +406,7 @@ a {
   }
 }
 
-// ---- Data Visualization (coursework) ----
+// ---- Data Visualization (coursework) —----
 .coursework-list,
 .assignment-detail {
   @include container;
