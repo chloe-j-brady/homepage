@@ -1,29 +1,18 @@
-/* 
-AI usage note: I hadn't used SCSS/Sass before this project,
-so I used Claude (Anthropic) to help write this
-stylesheet — the variable system, the mixin, and the
-responsive/nesting patterns throughout. Comments below are
-my notes explaining what each part does and why, so I can
-walk through this file if asked.*/
+/* Resource referenced: Claude (Anthropic) — consulted for SCSS syntax,
+variable/mixin patterns, and responsive nesting used in this file. */
 
 // ---- Variables ----
-// SCSS lets you define reusable values with $name. Regular CSS
-// doesn't have this natively
-// Defining colors/spacing here means if I want to change my
-// theme's purple, I only change it in ONE place, not everywhere
-// it's used across the file.
+// $name values defined once here, reused everywhere below —
+// change the theme in one place instead of hunting through the file.
 $color-bg: #f5f3fa;        // very light lavender background
 $color-surface: #ffffff;   // white cards/panels
-$color-text: #2e2440;      // deep purple-toned text (better contrast than pure black)
+$color-text: #2e2440;      // deep purple-toned text
 $color-muted: #7a6f94;     // muted purple-gray for secondary text
 $color-primary: #9b7fd4;   // main light purple accent
 $color-primary-dark: #7a5cc0; // darker purple for hover states
 $color-border: #e2e2ea;
 
-// Spacing scale — instead of picking random pixel values every
-// time I need margin/padding, I pick from this fixed set (8, 16,
-// 32, 48px). Keeps spacing consistent across the whole site
-// instead of everything being slightly different by accident.
+// Spacing scale —  fixed set (8, 16, 32, 48px). Keeps spacing consistent across the whole site
 $spacing-sm: 8px;
 $spacing-md: 16px;
 $spacing-lg: 32px;
@@ -40,21 +29,15 @@ $breakpoint-tablet: 768px;
 $breakpoint-mobile: 480px;
 
 // ---- Mixin ----
-// A mixin is SCSS's version of a reusable function, but for CSS
-// rules instead of values. @include container (used all over
-// this file below) pastes in this exact block of centering/
-// padding rules. Without a mixin I'd have to copy-paste this
-// max-width/margin/padding block into every section by hand —
-// this way I write it once and reuse it.
+// // A mixin pastes in this block of rules wherever @include container
+// is called, so I don't copy-paste the same centering/padding rules into every section.
 @mixin container {
   max-width: $max-width;
   margin: 0 auto;       // centers the block horizontally
   padding: 0 $spacing-lg;
 
-  // Nested media query: SCSS lets you nest a @media rule inside
-  // a selector instead of writing a separate block elsewhere in
-  // the file. On very small screens, use less side padding since
-  // there's less room to spare.
+  // Nested media query — SCSS lets @media live inside a selector
+  // instead of a separate block. Less side padding on small screens.
   @media (max-width: $breakpoint-mobile) {
     padding: 0 $spacing-md;
   }
@@ -67,8 +50,7 @@ $breakpoint-mobile: 480px;
   color: $color-text;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   // ^ this is a system-font stack: use the OS's native font
-  // (San Francisco on Mac, Segoe UI on Windows, etc.) instead of
-  // loading a custom web font, so text renders fast and familiar.
+  // San Francisco on Mac, Segoe UI on Windows, etc. 
 }
 
 // ---- Header ----
@@ -78,9 +60,7 @@ $breakpoint-mobile: 480px;
   padding-bottom: $spacing-md;
   text-align: center;
 
-  // Nesting: writing "h1 { ... }" INSIDE .Header compiles down to
-  // ".Header h1 { ... }" in plain CSS. It's just a shorthand for
-  // "this rule only applies to h1s that are inside .Header".
+  // Nesting h1 inside .Header compiles to ".Header h1" in plain CSS.
   h1 {
     margin: 0 0 $spacing-sm;
     font-size: 2.5rem;
@@ -111,24 +91,20 @@ $breakpoint-mobile: 480px;
     font-weight: 600;
     padding: $spacing-sm $spacing-md;
     border-radius: $radius;
-    // Only animate color/background, not everything — keeps the
-    // hover effect smooth instead of janky.
+    // Only animate color/background, not everything — keeps the hover effect smooth 
     transition: background-color 0.15s ease, color 0.15s ease;
 
-    // "&" refers back to the parent selector (here, "a"). So
-    // "&:hover" compiles to "a:hover" — same idea as nesting above,
-    // just for pseudo-classes instead of child elements.
+    // "&" refers back to the parent selector, so "&:hover" compiles
+    // to "a:hover".
     &:hover {
       background-color: $color-surface;
       color: $color-primary;
     }
 
-    // Applied when React adds the "active" class to the current page's link
+    // React adds the "active" class to the current page's link.
     &.active {
       color: $color-primary;
-      // rgba() here takes my $color-primary variable and adds 10%
-      // opacity — a subtle tinted background instead of a solid one.
-      background-color: rgba($color-primary, 0.1);
+      background-color: rgba($color-primary, 0.1); // primary color at 10% opacity
     }
   }
 }
@@ -158,7 +134,7 @@ $breakpoint-mobile: 480px;
   flex-shrink: 0;         // stops the photo from shrinking if the text next to it is long
 }
 
-// ---- About Details (longer text below the hero row) ----
+// ---- About Details  ----
 .about-details {
   @include container;
   max-width: 700px;       // narrower than the page max-width — long paragraphs read better narrower
@@ -170,8 +146,7 @@ $breakpoint-mobile: 480px;
     margin: 0 0 $spacing-md;
 
     // ":last-child" removes the bottom margin from the final
-    // paragraph only, so there's no extra empty space before
-    // the next section starts.
+    // paragraph only, so there's no extra empty space before the next section starts.
     &:last-child {
       margin-bottom: 0;
     }
@@ -376,7 +351,7 @@ $breakpoint-mobile: 480px;
   text-align: center;
   color: $color-muted;
   font-weight: 600;
-  min-height: 1.5em; // reserves space for the tooltip text so the layout doesn't jump when it appears/disappears
+  min-height: 1.5em; // reserves space  so the layout doesn't jump 
 }
 
 // ---- Scroll reveal animation ----

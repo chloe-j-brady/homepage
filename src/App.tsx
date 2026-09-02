@@ -20,7 +20,7 @@ function App() {
             <Route path="/experience" element={<Experience />} />
             <Route path="/travel" element={<Travel />} />
             <Route path="/data-visualization" element={<DataVisualization />} />
-            <Route path="/data-visualization/a0" element={<A0 />} />
+            <Route path="/data-visualization/A0" element={<A0 />} />
           </Routes>
         </main>
       </div>

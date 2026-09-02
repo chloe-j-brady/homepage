@@ -1,12 +1,8 @@
-/**
- * Reveal — wraps any content and fades/slides it in once it scrolls into view.
- * Reusable across any page — just wrap a section in <Reveal>...</Reveal>.
- *
- * AI usage: I wanted the site to feel more seamless/polished as you scroll
- * (this is one of my extra-credit portions). I used
- * Claude (Anthropic) to help build this using the IntersectionObserver
- * browser API, which I hadn't used before.
- */
+/* Reveal component — wraps content and makes it fade/slide in when you
+scroll to it. Can reuse this on any page, just wrap stuff in <Reveal>...</Reveal>.
+AI usage: this was one of my extra credit ideas, wanted the site to feel
+less static when scrolling. Used Claude to help me figure out the
+IntersectionObserver API since I'd never used it before. */
 import { useEffect, useRef, useState, ReactNode } from "react";
 
 interface RevealProps {
@@ -14,51 +10,39 @@ interface RevealProps {
 }
 
 function Reveal({ children }: RevealProps) {
-  // `ref` gives us a direct handle on the actual <div> DOM node below,
-  // so we can pass it to the browser's IntersectionObserver API.
-  // React state (isVisible) can't do this on its own — we need the
-  // real DOM element to watch it enter/leave the viewport.
+    // need an actual reference to the div itself (not just React state)
+    // because IntersectionObserver has to watch a real DOM element
   const ref = useRef<HTMLDivElement>(null);
 
-  // Tracks whether this element has scrolled into view yet.
-  // Starts false (hidden/not-animated-in), flips to true once seen.
+ // false = hasn't been scrolled to yet, true = it has and should animate in
   const [isVisible, setIsVisible] = useState(false);
 
-  // useEffect with an empty dependency array ([]) runs once, right after
-  // this component first renders — the right place to set up a browser
-  // API "listener" like IntersectionObserver.
+ // empty [] means this only runs once when the component first loads, which is when we want to set up the observer
   useEffect(() => {
     const element = ref.current;
     if (!element) return; // safety check — ref isn't attached yet on first paint
 
-    // IntersectionObserver watches when an element enters the viewport,
-    // without needing to manually listen to scroll events ourselves
-    // (manual scroll listeners are less efficient and more code to manage).
+   // this watches for when the div scrolls into view instead of me having
+   // to write my own scroll event listener (which is more code and worse for performance)
     const observer = new IntersectionObserver(
       ([entry]) => {
         // `entry.isIntersecting` is true once the element is on screen.
         if (entry.isIntersecting) {
-          setIsVisible(true); // triggers the fade/slide-in CSS via the className below
+          setIsVisible(true); // triggers the fade/slide-in 
           observer.unobserve(element); // stop watching — only animate in once, not every time it scrolls by
         }
       },
-      { threshold: 0.10
-       } // "intersecting" fires once 10% of the element is visible on screen
+      { threshold: 0.10} // counts as "visible" once 10% of it is on screen
     );
+    observer.observe(element); 
 
-    observer.observe(element); // start watching this specific element
-
-    // Cleanup function: React runs this if the component unmounts
-    // (e.g. navigating away). Disconnecting avoids a memory leak from
-    // a stale observer still watching a DOM node that's gone.
+    // runs if the component ever unmounts, so we're not leaving an
+    // observer running on a div that doesn't exist anymore
     return () => observer.disconnect();
   }, []);
 
-  // The className switches between "reveal" (hidden/offset state) and
-  // "reveal reveal-visible" (animated-in state) based on isVisible.
-  // The actual fade/slide animation itself lives in your CSS, keyed off
-  // the "reveal-visible" class — this component only decides *when*
-  // to add that class.
+ // swaps the className depending on isVisible — actual fade/slide
+  // animation is handled in the CSS, this just adds/removes the class
   return (
     <div ref={ref} className={`reveal ${isVisible ? "reveal-visible" : ""}`}>
       {children}

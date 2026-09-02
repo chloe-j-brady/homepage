@@ -11,7 +11,7 @@ interface Quote {
 }
 
 // A small set of quotes that mean something to me — rotates through
-// them with a "Next" button rather than showing just one static quote.
+// them with a "Next" button
 const quotes: Quote[] = [
   { text: "Everything happens for a reason.", author: "My motto" },
   { text: "Education is the kindling of a flame, not the filling of a vessel.", author: "Socrates" },
