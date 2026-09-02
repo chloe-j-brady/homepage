@@ -25,20 +25,20 @@ function Home() {
         <section className="about-details">
           <p>
             Some of my favorite classes so far have been Intro to Data Science, Data Mining,
-            and Databases — I like the moment where a pile of raw, disorganized
+            and Databases. I like the moment where a pile of raw, disorganized
             data actually starts making sense. On the chemistry side, Organic
             Chemistry has been a surprising highlight; there's something
             satisfying about working through a synthesis problem that isn't
             all that different from writing and debugging code.
           </p>
           <p>
-            Outside of school, I'm big into working out. From morning walks with my friends, lifting weights to swimming — it's my go-to way to
+            Outside of school, I'm big into working out. From morning walks with my friends, lifting weights to swimming, it's my go-to way to
             reset after a long day of classes or coding.
           </p>
           <p>
             I grew up in Christchurch, New Zealand before moving to Omaha, Nebraska,
             and I spent my freshman year studying abroad at FSU's Valencia,
-            Spain campus. I'm thisgraduating in May 2027.
+            Spain campus. I'm going to be graduating in May of 2027.
           </p>
         </section>
       </Reveal>

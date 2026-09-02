@@ -23,8 +23,8 @@ function Travel() {
         <p>
           Now at FSU, I've never given up the opportunity to travel and
           explore the world. My freshman year, straight out of high school,
-          I studied abroad at FSU's international campus in Valencia, Spain —
-          taking my required classes there along with Spanish. I loved
+          I studied abroad at FSU's international campus in Valencia, Spain. 
+          I took my required classes there, along with Spanish. I loved
           living in a new country and learning a new language.
         </p>
         <p>
